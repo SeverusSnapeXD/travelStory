@@ -109,15 +109,27 @@ const Main = ({navigation}) => {
       <View style={styles.heading}>
         <Text style={styles.headingText}>Mis Viajes</Text>
       </View>
-      <View style={{flex: 1}}>
-        <FlatList
-          style={styles.list}
-          data={data}
-          showsVerticalScrollIndicator={false}
-          renderItem={renderScrn}
-          keyExtractor={item => item.id}
-        />
-      </View>
+      {data?.length ? (
+        <View style={{flex: 1}}>
+          <FlatList
+            style={styles.list}
+            data={data}
+            showsVerticalScrollIndicator={false}
+            renderItem={renderScrn}
+            keyExtractor={item => item.id}
+          />
+        </View>
+      ) : (
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <Text style={{fontSize: 25}}>Add albums from top + button</Text>
+          <Icons
+            name="compass-outline"
+            size={100}
+            color="black"
+            onPress={() => navigation.openDrawer()}
+          />
+        </View>
+      )}
     </View>
   );
 };

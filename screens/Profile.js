@@ -158,6 +158,21 @@ const Profile = ({navigation}) => {
     }
   }, [image]);
 
+  // UPDATE USER DATA
+  const updateUser = async () => {
+    await firestore()
+      .collection('users')
+      .doc(uid)
+      .update({
+        name: name,
+        number: number,
+        address: address,
+        dob: dob,
+      })
+      .then(() => alert('Profile Updated Successfully!'))
+      .catch(e => console.log(e));
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.bg}>
@@ -177,39 +192,46 @@ const Profile = ({navigation}) => {
         />
       </View>
 
-      <KeyboardAvoidingView style={styles.d} behavior="position">
-        {/* <ScrollView style={{height: '100%'}}> */}
-        <View style={styles.details}>
-          <TextInput
-            style={styles.input}
-            value={name}
-            placeholder="Nombre"
-            onChangeText={e => setname(e)}
-          />
-          <TextInput style={styles.input} value={email} placeholder="Correo" />
-          <TextInput
-            style={styles.input}
-            value={number}
-            placeholder="Número  celular"
-            onChangeText={e => setnumber(e)}
-          />
-          <TextInput
-            style={styles.input}
-            value={address}
-            placeholder="Dirección"
-            onChangeText={e => setaddress(e)}
-          />
-          <TextInput
-            style={styles.input}
-            value={dob}
-            placeholder="F. Nacimiento"
-            onChangeText={e => setdob(e)}
-          />
-        </View>
-      </KeyboardAvoidingView>
-      <TouchableOpacity style={[globalStyles.btnBlue, styles.btn]}>
-        <Text style={{color: 'white'}}>GUARDAR</Text>
-      </TouchableOpacity>
+      <View style={styles.d}>
+        <ScrollView style={{height: '100%'}}>
+          <KeyboardAvoidingView style={styles.details} behavior="padding">
+            <TextInput
+              style={styles.input}
+              value={name}
+              placeholder="Nombre"
+              onChangeText={e => setname(e)}
+            />
+            <TextInput
+              style={styles.input}
+              value={email}
+              placeholder="Correo"
+            />
+            <TextInput
+              style={styles.input}
+              value={number}
+              placeholder="Número  celular"
+              onChangeText={e => setnumber(e)}
+            />
+            <TextInput
+              style={styles.input}
+              value={address}
+              placeholder="Dirección"
+              onChangeText={e => setaddress(e)}
+            />
+            <TextInput
+              style={styles.input}
+              value={dob}
+              placeholder="F. Nacimiento"
+              onChangeText={e => setdob(e)}
+            />
+          </KeyboardAvoidingView>
+          <TouchableOpacity
+            style={[globalStyles.btnBlue, styles.btn]}
+            onPress={updateUser}>
+            <Text style={{color: 'white'}}>GUARDAR</Text>
+          </TouchableOpacity>
+        </ScrollView>
+      </View>
     </View>
   );
 };
@@ -246,12 +268,9 @@ const styles = StyleSheet.create({
   d: {
     width: '100%',
     marginTop: -25,
-    marginBottom: 20,
-    paddingBottom: 35,
-    // backgroundColor: 'grey',
+    height: '75%',
   },
   input: {
-    // backgroundColor: 'grey',
     width: '100%',
     paddingHorizontal: 15,
     fontSize: 20,
@@ -262,6 +281,7 @@ const styles = StyleSheet.create({
   btn: {
     alignSelf: 'flex-end',
     marginRight: 20,
+    marginTop: 10,
   },
   indicator: {
     width: '100%',

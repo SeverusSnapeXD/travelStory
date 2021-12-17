@@ -99,7 +99,7 @@ const NewPost = ({navigation, route}) => {
         image: imageUrl,
         time: firestore.Timestamp.fromDate(new Date()),
         description: description,
-        // location: loctitle,
+        location: loctitle,
       })
       .then(() => {
         Alert.alert(
@@ -188,73 +188,78 @@ const NewPost = ({navigation, route}) => {
 
   return (
     <View style={styles.container}>
-      <ScrollView>
-        <View style={{backgroundColor: 'grey', height: '20%'}}>
-          <Text style={styles.text}>Select Image</Text>
+      <ScrollView contentContainerStyle={{flex: 1}}>
+        <View style={{height: '100%'}}>
+          <View style={{height: '20%'}}>
+            <Text style={styles.text}>Select Image</Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                marginHorizontal: 10,
+                marginVertical: 15,
+              }}>
+              <TouchableOpacity
+                style={globalStyles.btnBlue}
+                onPress={selectpic}>
+                <Text style={{color: 'white'}}>Select</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={globalStyles.btnBlue} onPress={takepic}>
+                <Text style={{color: 'white'}}>Take</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          {/* <View style={{height: i}} > */}
+          {image.length ? (
+            <Image
+              style={{
+                height: '45%',
+                width: '100%',
+                alignSelf: 'center',
+                borderWidth: 1,
+                borderColor: 'black',
+              }}
+              source={{uri: image}}
+            />
+          ) : null}
+          {/* </View> */}
+          <View style={{backgroundColor: 'lightblue', height: '35%'}}>
+            <Text style={styles.text}>Añade una descripción</Text>
+            <TextInput
+              style={{
+                ...globalStyles.textinput,
+                textAlign: 'justify',
+                textAlignVertical: 'top',
+                width: '100%',
+              }}
+              value={description}
+              onChangeText={e => setdescription(e)}
+              multiline
+              numberOfLines={5}
+            />
+          </View>
           <View
             style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              marginHorizontal: 10,
-              marginVertical: 15,
-            }}>
-            <TouchableOpacity style={globalStyles.btnBlue} onPress={selectpic}>
-              <Text style={{color: 'white'}}>Select</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={globalStyles.btnBlue} onPress={takepic}>
-              <Text style={{color: 'white'}}>Take</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-
-        {image.length ? (
-          <Image
-            style={{
-              height: 200,
               width: '100%',
+              height: '45%',
               alignSelf: 'center',
-              borderWidth: 1,
-              borderColor: 'black',
-            }}
-            source={{uri: image}}
-          />
-        ) : null}
-
-        <Text style={styles.text}>Añade una descripción</Text>
-        <TextInput
-          style={{
-            ...globalStyles.textinput,
-            textAlign: 'justify',
-            textAlignVertical: 'top',
-            width: '100%',
-          }}
-          value={description}
-          onChangeText={e => setdescription(e)}
-          multiline
-          numberOfLines={5}
-        />
-        <Text style={styles.text}>Confirma tu ubicación </Text>
-        <View
-          style={{
-            width: '98%',
-            height: '50%',
-            alignSelf: 'center',
-            // backgroundColor: 'grey',
-          }}>
-          <MapView
-            provider={PROVIDER_GOOGLE}
-            style={{backgroundColor: 'grey'}}
-            onPress={e => setmarker(e.nativeEvent.coordinate)}
-            initialRegion={{
-              latitude: 37.78825,
-              longitude: -122.4324,
-              latitudeDelta: 0.015,
-              longitudeDelta: 0.0121,
             }}>
-            {marker ? (
-              <Marker title={loctitle} coordinate={marker}></Marker>
-            ) : null}
-          </MapView>
+            <Text style={styles.text}>Confirma tu ubicación </Text>
+            <MapView
+              provider={PROVIDER_GOOGLE}
+              style={{width: '100%', height: '100%'}}
+              onPress={e => setmarker(e.nativeEvent.coordinate)}
+              initialRegion={{
+                latitude: 37.78825,
+                longitude: -122.4324,
+                latitudeDelta: 0.015,
+                longitudeDelta: 0.0121,
+              }}>
+              {marker ? (
+                <Marker title={loctitle} coordinate={marker}></Marker>
+              ) : null}
+            </MapView>
+          </View>
         </View>
       </ScrollView>
     </View>
@@ -264,10 +269,10 @@ export default NewPost;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1,
     width: '90%',
     alignSelf: 'center',
-    // height: '100%',
+    height: '100%',
     // backgroundColor: 'grey',
   },
   text: {

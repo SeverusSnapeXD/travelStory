@@ -55,6 +55,7 @@ const Register = ({navigation}) => {
           date: new Date(),
           name: name,
           dob: dob,
+          email: email,
         }),
       )
       .then(() => navigation.replace('DrawerStack'))

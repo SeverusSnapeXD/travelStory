@@ -85,7 +85,7 @@ const TripDetails = ({navigation, route}) => {
         <Icon
           name="globe"
           size={120}
-          onPress={() => navigation.navigate('NewPost')}
+          onPress={() => navigation.navigate('NewPost', {title: title})}
         />
         <Text>Add more post to your album</Text>
       </View>
