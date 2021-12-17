@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "364412437059",
+    "project_id": "travelstory-335116",
+    "storage_bucket": "travelstory-335116.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:364412437059:android:297f9e7c931d6bba62caf6",
+        "android_client_info": {
+          "package_name": "com.travelstory"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "364412437059-ua9niu9gg9fqp4cu5ndi1ug9cugomvnp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBzvkltF9ft3JB4iVVCdENT2yigMvTUZbc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "364412437059-ua9niu9gg9fqp4cu5ndi1ug9cugomvnp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
