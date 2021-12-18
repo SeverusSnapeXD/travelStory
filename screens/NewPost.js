@@ -54,7 +54,6 @@ const NewPost = ({navigation, route}) => {
       cropping: true,
     })
       .then(image => {
-        console.log('select ', image);
         setimage(image.path);
       })
       .catch(e => console.log(e));
@@ -223,7 +222,7 @@ const NewPost = ({navigation, route}) => {
             />
           ) : null}
           {/* </View> */}
-          <View style={{backgroundColor: 'lightblue', height: '35%'}}>
+          <View style={{height: '35%'}}>
             <Text style={styles.text}>Añade una descripción</Text>
             <TextInput
               style={{

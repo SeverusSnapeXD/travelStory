@@ -38,6 +38,9 @@ const TripDetails = ({navigation, route}) => {
 
   useEffect(() => {
     loadData();
+    return () => {
+      setnewdata([]);
+    };
   }, []);
 
   const loadData = async () => {
@@ -62,7 +65,6 @@ const TripDetails = ({navigation, route}) => {
         }
       })
       .then(arr => {
-        console.log('arr ', arr);
         if (arr) {
           setnewdata(arr);
         }

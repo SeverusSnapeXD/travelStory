@@ -27,13 +27,10 @@ const Card = ({text, location, dbimage}) => {
         setname(data.name);
         if (data.image) {
           setimage(data.image);
-          console.log('ran');
         }
       })
       .catch(e => console.log(e));
   };
-
-  console.log('img ', dbimage);
 
   return (
     <View style={styles.card}>

@@ -44,6 +44,9 @@ const Main = ({navigation}) => {
 
   useEffect(() => {
     loadAlbums();
+    return () => {
+      setdata([]);
+    };
   }, []);
 
   const loadAlbums = async () => {
