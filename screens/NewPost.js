@@ -17,6 +17,7 @@ import storage from '@react-native-firebase/storage';
 import ImagePicker from 'react-native-image-crop-picker';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
+import {set} from 'react-native-reanimated';
 
 const NewPost = ({navigation, route}) => {
   // ALBUM NAME IS PASSED FROM PREVIOUS SCREEN
@@ -31,7 +32,7 @@ const NewPost = ({navigation, route}) => {
           size={35}
           style={{marginRight: 15}}
           color="white"
-          onPress={submitPost}
+          onPress={createPost}
         />
       ),
       headerLeft: () => (
@@ -45,6 +46,31 @@ const NewPost = ({navigation, route}) => {
       ),
     });
   }, [navigation]);
+
+  // ALTERNATE SUBMISSION WITHOUT THE IMAGE_URL
+
+  const createPost = async () => {
+    if (description == null || loctitle == null) {
+      alert('Please Enter all the fields!');
+      return;
+    }
+    await firestore()
+      .collection('users')
+      .doc(uid)
+      .collection('albums')
+      .doc(title)
+      .collection('posts')
+      .add({
+        description: description,
+        location: loctitle,
+        date: new Date(),
+      })
+      .then(() => alert('Post Created!'))
+      .then(() => setdescription(''))
+      .then(() => settitle(''))
+      .then(() => navigation.goBack())
+      .catch(e => console.log(e));
+  };
 
   //OPEN GALLERY
   const selectpic = () => {
@@ -157,6 +183,7 @@ const NewPost = ({navigation, route}) => {
     Geocoder.init(API_KEY);
     Geocoder.from(marker.latitude, marker.longitude)
       .then(json => {
+        console.log(marker.latitude, marker.longitude);
         var addressComponent =
           json.results[0].address_components[1].short_name ||
           json.results[0].address_components[1].long_name;
@@ -249,8 +276,8 @@ const NewPost = ({navigation, route}) => {
               style={{width: '100%', height: '100%'}}
               onPress={e => setmarker(e.nativeEvent.coordinate)}
               initialRegion={{
-                latitude: 37.78825,
-                longitude: -122.4324,
+                latitude: -12.074,
+                longitude: -77.026,
                 latitudeDelta: 0.015,
                 longitudeDelta: 0.0121,
               }}>
