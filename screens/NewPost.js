@@ -17,11 +17,45 @@ import storage from '@react-native-firebase/storage';
 import ImagePicker from 'react-native-image-crop-picker';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
-import {set} from 'react-native-reanimated';
+
+//
+//
+//
+//
+//
+//
+//
+//
+//   NEGLECT THIS PAGE. THIS PAGE IS NOT USED IN THE APPLICATION
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 const NewPost = ({navigation, route}) => {
   // ALBUM NAME IS PASSED FROM PREVIOUS SCREEN
   const {title} = route.params;
+
+  const uid = auth().currentUser.uid;
 
   // HEADER BUTTON CUSTOMIZATION
   const headerbtn = useLayoutEffect(() => {
@@ -46,30 +80,21 @@ const NewPost = ({navigation, route}) => {
       ),
     });
   }, [navigation]);
+  ///////////////
+
+  const [loctitle, settitle] = useState('');
+  const [description, setdescription] = useState('');
 
   // ALTERNATE SUBMISSION WITHOUT THE IMAGE_URL
 
-  const createPost = async () => {
-    if (description == null || loctitle == null) {
-      alert('Please Enter all the fields!');
-      return;
-    }
-    await firestore()
-      .collection('users')
-      .doc(uid)
-      .collection('albums')
-      .doc(title)
-      .collection('posts')
-      .add({
-        description: description,
-        location: loctitle,
-        date: new Date(),
-      })
-      .then(() => alert('Post Created!'))
-      .then(() => setdescription(''))
-      .then(() => settitle(''))
-      .then(() => navigation.goBack())
-      .catch(e => console.log(e));
+  const createPost = () => {
+    console.log('ran');
+    console.log(description);
+  };
+
+  const clearStates = () => {
+    setdescription('');
+    settitle('');
   };
 
   //OPEN GALLERY
@@ -100,8 +125,6 @@ const NewPost = ({navigation, route}) => {
       .catch(e => console.log(e));
   };
 
-  const uid = auth().currentUser.uid;
-
   const [image, setimage] = useState('');
 
   const submitPost = async () => {
@@ -113,7 +136,6 @@ const NewPost = ({navigation, route}) => {
 
     // setimage(null);
     // setisupload(false);
-
     firestore()
       .collection('users')
       .doc(uid)
@@ -208,10 +230,6 @@ const NewPost = ({navigation, route}) => {
     }
   }, [marker]);
 
-  const [loctitle, settitle] = useState('');
-
-  const [description, setdescription] = useState('');
-
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={{flex: 1}}>
@@ -252,6 +270,7 @@ const NewPost = ({navigation, route}) => {
           <View style={{height: '35%'}}>
             <Text style={styles.text}>Añade una descripción</Text>
             <TextInput
+              onChangeText={d => setdescription(d)}
               style={{
                 ...globalStyles.textinput,
                 textAlign: 'justify',
@@ -259,9 +278,8 @@ const NewPost = ({navigation, route}) => {
                 width: '100%',
               }}
               value={description}
-              onChangeText={e => setdescription(e)}
               multiline
-              numberOfLines={5}
+              numberOfLines={3}
             />
           </View>
           <View
@@ -269,6 +287,7 @@ const NewPost = ({navigation, route}) => {
               width: '100%',
               height: '45%',
               alignSelf: 'center',
+              backgroundColor: 'grey',
             }}>
             <Text style={styles.text}>Confirma tu ubicación </Text>
             <MapView

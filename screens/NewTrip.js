@@ -12,6 +12,7 @@ import {
 import {globalStyles} from './styles/globalStyles';
 import Icon from 'react-native-vector-icons/Ionicons';
 import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 import {AuthContext} from './AuthProvider';
 
 import {DateTimePickerModal} from 'react-native-modal-datetime-picker';
@@ -32,7 +33,7 @@ const NewTrip = ({navigation}) => {
     });
   }, [navigation]);
 
-  const {userid} = useContext(AuthContext);
+  const userid = auth().currentUser.uid;
 
   const [date, setDate] = useState(new Date());
   const [show, setshow] = useState(false);
@@ -47,16 +48,13 @@ const NewTrip = ({navigation}) => {
   );
 
   const handleDate = n => {
-    // console.log('date ', n);
     let newdate = n.getFullYear() + '/' + n.getMonth() + '/' + n.getDate();
-    // console.log('n ', newdate);
     seetselectedDate(newdate);
     setshow(false);
   };
 
   const openPicker = () => {
     setshow(true);
-    // console.log('ran here');
   };
 
   const [keyboardStatus, setKeyboardStatus] = useState(undefined);
@@ -87,7 +85,7 @@ const NewTrip = ({navigation}) => {
   const addAlbum = async () => {
     await firestore()
       .collection('users')
-      .doc(userid.toString())
+      .doc(userid)
       .collection('albums')
       .doc(tripnname)
       .set({
@@ -96,9 +94,10 @@ const NewTrip = ({navigation}) => {
         destination: destination,
         date: selectedDate,
         description: description,
+        image: '',
       })
       .then(() => alert('Album Created!'))
-      .then(() => navigation.navigate('TripDetails', {title: tripnname}))
+      .then(() => navigation.goBack())
       .then(() => clearStates())
       .catch(e => console.log(e));
   };

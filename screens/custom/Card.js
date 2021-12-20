@@ -47,7 +47,7 @@ const Card = ({text, location, dbimage}) => {
             <Text style={styles.place}>{location}</Text>
           </View>
         </View>
-        <Text style={styles.time}>Hace 3 horas</Text>
+        {/* <Text style={styles.time}>Hace 3 horas</Text> */}
       </View>
       <View>
         <Image

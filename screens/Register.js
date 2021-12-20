@@ -14,12 +14,13 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {globalStyles} from './styles/globalStyles';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import {DateTimePickerModal} from 'react-native-modal-datetime-picker';
+// import Icon from 'react-native-vector-icons/Ionicons';
 
 const Register = ({navigation}) => {
   const [name, setname] = useState('');
   const [email, setemail] = useState('');
   const [pwd, setpwd] = useState('');
-  const [dob, setdob] = useState('');
 
   const docref = firestore().collection('users');
 
@@ -31,7 +32,7 @@ const Register = ({navigation}) => {
     if (
       email.length == 0 ||
       pwd.length == 0 ||
-      dob.length == 0 ||
+      selectedDate.length == 0 ||
       name.length == 0
     ) {
       alert('Please fill all the fields!');
@@ -50,11 +51,11 @@ const Register = ({navigation}) => {
     auth()
       .createUserWithEmailAndPassword(email, pwd)
       .then(user =>
-        docref.doc(user.user.uid.toString()).set({
-          id: user.user.uid.toString(),
+        docref.doc(user.user.uid).set({
+          id: user.user.uid,
           date: new Date(),
           name: name,
-          dob: dob,
+          dob: selectedDate,
           email: email,
         }),
       )
@@ -63,6 +64,18 @@ const Register = ({navigation}) => {
   };
 
   const img = require('./bg4.jpg');
+
+  // DATE PICKER
+
+  // const [date, setDate] = useState(new Date());
+  const [show, setshow] = useState(false);
+  const [selectedDate, seetselectedDate] = useState('');
+
+  const handleDate = n => {
+    let newdate = n.getFullYear() + '/' + n.getMonth() + '/' + n.getDate();
+    seetselectedDate(newdate);
+    setshow(false);
+  };
 
   return (
     <View style={styles.container}>
@@ -102,12 +115,40 @@ const Register = ({navigation}) => {
                 onChangeText={e => setpwd(e)}
                 placeholderTextColor="white"
               />
-              <TextInput
-                style={{...globalStyles.textinput, color: 'white'}}
-                placeholder="F. DE NACIMIENTO"
-                value={dob}
-                onChangeText={e => setdob(e)}
-                placeholderTextColor="white"
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  width: '80%',
+                }}>
+                <TextInput
+                  style={{
+                    ...globalStyles.textinput,
+                    color: 'white',
+                    width: '80%',
+                  }}
+                  placeholder="F. DE NACIMIENTO"
+                  value={selectedDate}
+                  // onChangeText={e => setdob(e)}
+                  placeholderTextColor="white"
+                />
+                <Icon
+                  name="calendar-outline"
+                  color="white"
+                  size={45}
+                  style={{
+                    backgroundColor: '#59C3C3',
+                    borderRadius: 5,
+                  }}
+                  onPress={() => setshow(true)}
+                />
+              </View>
+              <DateTimePickerModal
+                isVisible={show}
+                mode="date"
+                onConfirm={handleDate}
+                onCancel={() => setshow(false)}
               />
             </ScrollView>
             <View style={styles.buttons}>
@@ -156,5 +197,8 @@ const styles = StyleSheet.create({
   overlay: {
     flex: 1,
     backgroundColor: 'rgba(80,80,80,0.5)',
+  },
+  date: {
+    width: '70%',
   },
 });

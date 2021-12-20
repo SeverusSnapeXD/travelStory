@@ -19,7 +19,7 @@ const TripDetails = ({navigation, route}) => {
           size={35}
           style={{marginRight: 15}}
           color="white"
-          onPress={() => navigation.navigate('NewPost', {title: title})}
+          onPress={() => navigation.navigate('PostNew', {title: title})}
         />
       ),
       headerLeft: () => (
@@ -59,6 +59,7 @@ const TripDetails = ({navigation, route}) => {
             const id = doc.id;
             arr.push({...data, id});
           });
+          setrefreshing(false);
           return arr;
         } else {
           console.log('no posts found');
@@ -87,12 +88,23 @@ const TripDetails = ({navigation, route}) => {
         <Icon
           name="globe"
           size={120}
-          onPress={() => navigation.navigate('NewPost', {title: title})}
+          onPress={() => navigation.navigate('PostNew', {title: title})}
         />
         <Text>Add more post to your album</Text>
       </View>
     );
   };
+
+  const onRefresh = () => {
+    setrefreshing(true);
+    loadData();
+  };
+
+  setTimeout(() => {
+    setrefreshing(false);
+  }, 2000);
+
+  const [refreshing, setrefreshing] = useState(false);
 
   return (
     <View style={styles.container}>
@@ -106,6 +118,8 @@ const TripDetails = ({navigation, route}) => {
           showsVerticalScrollIndicator={false}
           style={{}}
           ListFooterComponent={<Footer />}
+          refreshing={refreshing}
+          onRefresh={onRefresh}
         />
       </View>
     </View>

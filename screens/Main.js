@@ -7,6 +7,7 @@ import {
   FlatList,
   Button,
   TouchableOpacity,
+  RefreshControl,
 } from 'react-native';
 import {DrawerActions} from '@react-navigation/native';
 import Icons from 'react-native-vector-icons/Ionicons';
@@ -68,10 +69,17 @@ const Main = ({navigation}) => {
         }
       })
       .then(arr => setdata(arr))
+      .then(() => setrefreshing(false))
       .catch(e => console.log(e));
   };
 
   const [data, setdata] = useState([]);
+  const [refreshing, setrefreshing] = useState(false);
+
+  const onRefresh = () => {
+    setrefreshing(true);
+    loadAlbums();
+  };
 
   const renderScrn = ({item}) => {
     return (
@@ -81,7 +89,11 @@ const Main = ({navigation}) => {
         key={item.id}
         activeOpacity={0.6}>
         <ImageBackground
-          source={require(img)}
+          source={{
+            uri: item.image
+              ? item.image
+              : 'https://media.istockphoto.com/photos/travel-during-the-covid19-pandemic-airplane-model-with-face-mask-and-picture-id1268257924?b=1&k=20&m=1268257924&s=170667a&w=0&h=kviE-Bd4sAaGuHXJqdzxk__-URPKAZV6Zj7VpnuXges=',
+          }}
           resizeMode="cover"
           imageStyle={{borderRadius: 20}}
           style={{
@@ -107,32 +119,45 @@ const Main = ({navigation}) => {
     </View>
   );
 
+  const Footer = () => {
+    return (
+      <View
+        style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}
+        refreshing={refreshing}
+        onRefresh={onRefresh}>
+        <Text style={{fontSize: 25}}>Add albums from top + button</Text>
+        <Icons
+          name="compass-outline"
+          size={100}
+          color="black"
+          onPress={() => navigation.openDrawer()}
+        />
+      </View>
+    );
+  };
+
+  setTimeout(() => {
+    setrefreshing(false);
+  }, 2000);
+
   return (
     <View style={styles.container}>
       <View style={styles.heading}>
         <Text style={styles.headingText}>Mis Viajes</Text>
       </View>
-      {data?.length ? (
-        <View style={{flex: 1}}>
-          <FlatList
-            style={styles.list}
-            data={data}
-            showsVerticalScrollIndicator={false}
-            renderItem={renderScrn}
-            keyExtractor={item => item.id}
-          />
-        </View>
-      ) : (
-        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-          <Text style={{fontSize: 25}}>Add albums from top + button</Text>
-          <Icons
-            name="compass-outline"
-            size={100}
-            color="black"
-            onPress={() => navigation.openDrawer()}
-          />
-        </View>
-      )}
+      {/* {data?.length ? ( */}
+      <View style={{flex: 1}}>
+        <FlatList
+          style={styles.list}
+          data={data}
+          showsVerticalScrollIndicator={false}
+          renderItem={renderScrn}
+          keyExtractor={item => item.id}
+          ListFooterComponent={<Footer />}
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+        />
+      </View>
     </View>
   );
 };

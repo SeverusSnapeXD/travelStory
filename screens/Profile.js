@@ -20,6 +20,7 @@ import ImagePicker from 'react-native-image-crop-picker';
 import {ScrollView} from 'react-native-gesture-handler';
 import Icons from 'react-native-vector-icons/Ionicons';
 import {sub} from 'react-native-reanimated';
+import {DateTimePickerModal} from 'react-native-modal-datetime-picker';
 
 const Profile = ({navigation}) => {
   const uid = auth().currentUser.uid;
@@ -173,6 +174,17 @@ const Profile = ({navigation}) => {
       .catch(e => console.log(e));
   };
 
+  // DATE PICKER
+
+  // const [date, setDate] = useState(new Date());
+  const [show, setshow] = useState(false);
+
+  const handleDate = n => {
+    let newdate = n.getFullYear() + '/' + n.getMonth() + '/' + n.getDate();
+    setdob(newdate);
+    setshow(false);
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.bg}>
@@ -218,11 +230,26 @@ const Profile = ({navigation}) => {
               placeholder="Dirección"
               onChangeText={e => setaddress(e)}
             />
-            <TextInput
-              style={styles.input}
-              value={dob}
-              placeholder="F. Nacimiento"
-              onChangeText={e => setdob(e)}
+            <View style={styles.dob}>
+              <TextInput
+                style={[styles.input, styles.dobicon]}
+                value={dob}
+                placeholder="F. Nacimiento"
+                // onChangeText={e => setdob(e)}
+              />
+              <Icons
+                name="calendar-outline"
+                color="black"
+                size={24}
+                style={{marginRight: 10}}
+                onPress={() => setshow(true)}
+              />
+            </View>
+            <DateTimePickerModal
+              isVisible={show}
+              mode="date"
+              onConfirm={handleDate}
+              onCancel={() => setshow(false)}
             />
           </KeyboardAvoidingView>
           <TouchableOpacity
@@ -287,5 +314,15 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     alignItems: 'center',
+  },
+  dobicon: {
+    width: '80%',
+  },
+  dob: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    // backgroundColor: 'grey',
+    width: '100%',
   },
 });

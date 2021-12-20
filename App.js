@@ -24,6 +24,7 @@ import NewTrip from './screens/NewTrip';
 import TripDetails from './screens/TripDetails';
 import NewPost from './screens/NewPost';
 import Profile from './screens/Profile';
+import PostNew from './screens/PostNew';
 import {AuthProvider} from './screens/AuthProvider';
 
 const Stack = createStackNavigator();
@@ -171,6 +172,18 @@ const HomeStack = ({navigation}) => {
         component={NewPost}
         options={{
           headerTitle: 'Nueva Publicación',
+          headerStyle: {
+            backgroundColor: '#59C3C3',
+          },
+          headerTintColor: 'white',
+          headerTitleAlign: 'center',
+        }}
+      />
+      <Stack.Screen
+        name="PostNew"
+        component={PostNew}
+        options={{
+          headerTitle: 'New Post',
           headerStyle: {
             backgroundColor: '#59C3C3',
           },
