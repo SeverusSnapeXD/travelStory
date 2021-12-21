@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   Alert,
   Dimensions,
+  PermissionsAndroid,
 } from 'react-native';
 import {globalStyles} from './styles/globalStyles';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -18,6 +19,7 @@ import storage from '@react-native-firebase/storage';
 import ImagePicker from 'react-native-image-crop-picker';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
+import Geolocation from '@react-native-community/geolocation';
 
 const PostNew = ({navigation, route}) => {
   const {title} = route.params;
@@ -83,6 +85,45 @@ const PostNew = ({navigation, route}) => {
       console.log('ran');
     }
   }, [marker]);
+
+  const requestGPSPermission = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+        {
+          title: 'TravelStory App GPS Permission',
+          message:
+            'TravelStory App needs to locate your location ' +
+            'so we can mark on the map.',
+          buttonNeutral: 'Ask Me Later',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK',
+        },
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log('granted');
+        return true;
+      } else {
+        // alert("App can't locate you!");
+        console.log('not granted');
+        return false;
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+  };
+
+  const checkPermission = async () => {
+    const result = await requestGPSPermission();
+    if (result) {
+      getGpsLocation();
+    }
+  };
+
+  useEffect(() => {
+    checkPermission();
+    // requestGPSPermission();
+  }, []);
 
   //OPEN GALLERY
   const selectpic = () => {
@@ -160,6 +201,21 @@ const PostNew = ({navigation, route}) => {
           error,
         );
       });
+  };
+
+  const getGpsLocation = () => {
+    Geolocation.getCurrentPosition(
+      pos => {
+        console.log('pos long', pos.coords.longitude);
+        console.log('pos lat', pos.coords.latitude);
+        setmarker({
+          latitude: pos.coords.latitude,
+          longitude: pos.coords.longitude,
+        });
+      },
+      error => console.log('Error ', error),
+      {enableHighAccuracy: false, timeout: 20000, maximumAge: 2000},
+    );
   };
 
   const updateImage = async url => {
