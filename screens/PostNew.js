@@ -309,14 +309,19 @@ const PostNew = ({navigation, route}) => {
           provider={PROVIDER_GOOGLE}
           style={{flex: 1}}
           onPress={e => setmarker(e.nativeEvent.coordinate)}
-          initialRegion={{
-            latitude: -12.074,
-            longitude: -77.026,
-            latitudeDelta: 0.015,
-            longitudeDelta: 0.0121,
-          }}>
+          showsUserLocation={true}
+          // initialRegion={{
+          //   latitude: -12.074,
+          //   longitude: -77.026,
+          //   latitudeDelta: 0.015,
+          //   longitudeDelta: 0.0121,
+          // }}
+        >
           {marker ? (
-            <Marker title={location} coordinate={marker}></Marker>
+            <Marker
+              title={location}
+              coordinate={marker}
+              showUserLocation={true}></Marker>
           ) : null}
         </MapView>
       </View>
