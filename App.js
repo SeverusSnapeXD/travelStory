@@ -54,6 +54,8 @@ const Drawer = createDrawerNavigator();
 //   );
 // };
 
+// clone app
+
 const App = () => {
   return (
     <AuthProvider>
