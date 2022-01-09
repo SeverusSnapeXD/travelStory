@@ -77,6 +77,8 @@ const App = () => {
   );
 };
 
+const he = "hello there"
+
 export default App;
 
 //SCREENS BEFORE USER HAS LOGGED IN
